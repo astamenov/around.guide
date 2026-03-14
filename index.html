@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Around.Guide — Your travel dreams, researched while you sleep</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sand:    #f5f0e8;
+      --cream:   #faf8f4;
+      --slate:   #3d4a5c;
+      --slate-l: #6b7a8d;
+      --terra:   #c4714a;
+      --sky:     #4a90b8;
+      --sky-l:   #6aafd6;
+      --dark:    #1e2630;
+      --white:   #ffffff;
+      --radius:  12px;
+      --shadow:  0 4px 24px rgba(30,38,48,.10);
+      --font-serif: 'Lora', Georgia, serif;
+      --font-sans:  'Inter', system-ui, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--cream);
+      color: var(--slate);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    img { display: block; max-width: 100%; }
+    a   { color: inherit; text-decoration: none; }
+
+    /* ── Utility ──────────────────────────────────────────────────── */
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section {
+      padding: 96px 0;
+    }
+
+    .label {
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--terra);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.75rem, 4vw, 2.75rem);
+      color: var(--dark);
+      line-height: 1.25;
+      margin-bottom: 20px;
+    }
+
+    .section-sub {
+      font-size: 1.1rem;
+      color: var(--slate-l);
+      max-width: 560px;
+      line-height: 1.7;
+    }
+
+    /* ── Nav ──────────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 20px 0;
+      transition: background .3s, box-shadow .3s;
+    }
+
+    nav.scrolled {
+      background: rgba(250,248,244,.92);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 rgba(0,0,0,.08);
+    }
+
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      color: var(--white);
+      font-weight: 600;
+      transition: color .3s;
+    }
+
+    nav.scrolled .nav-logo { color: var(--dark); }
+
+    .nav-cta {
+      background: var(--terra);
+      color: var(--white);
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-size: .875rem;
+      font-weight: 600;
+      transition: opacity .2s, transform .2s;
+    }
+
+    .nav-cta:hover { opacity: .9; transform: translateY(-1px); }
+
+    /* ── Hero ─────────────────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(20,28,38,.60) 0%, rgba(20,28,38,.55) 60%, rgba(20,28,38,.75) 100%),
+        url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1800&q=80') center/cover no-repeat;
+      transform: scale(1.05);
+      transition: transform 8s ease-out;
+    }
+
+    #hero.loaded .hero-bg { transform: scale(1); }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 120px 0 80px;
+      max-width: 680px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: .8rem;
+      color: rgba(255,255,255,.9);
+      margin-bottom: 32px;
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-badge span { width: 6px; height: 6px; border-radius: 50%; background: #5ddcb2; }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.25rem, 5.5vw, 4rem);
+      color: var(--white);
+      line-height: 1.18;
+      margin-bottom: 24px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: #f0c87a;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: rgba(255,255,255,.92);
+      margin-bottom: 40px;
+      max-width: 520px;
+      line-height: 1.7;
+      text-shadow: 0 1px 12px rgba(0,0,0,.5);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .btn-primary {
+      background: var(--terra);
+      color: var(--white);
+      padding: 15px 32px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      transition: opacity .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 20px rgba(196,113,74,.45);
+    }
+
+    .btn-primary:hover {
+      opacity: .92;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(196,113,74,.55);
+    }
+
+    .btn-ghost {
+      color: rgba(255,255,255,.85);
+      font-size: .95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color .2s;
+    }
+
+    .btn-ghost:hover { color: var(--white); }
+
+    .btn-ghost svg { transition: transform .2s; }
+    .btn-ghost:hover svg { transform: translateX(3px); }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,.5);
+      font-size: .75rem;
+      letter-spacing: .08em;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ── Problem ──────────────────────────────────────────────────── */
+    #problem {
+      background: var(--dark);
+      padding: 80px 0;
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2px;
+    }
+
+    .problem-item {
+      padding: 40px 36px;
+      background: rgba(255,255,255,.03);
+      border-top: 1px solid rgba(255,255,255,.06);
+      transition: background .3s;
+    }
+
+    .problem-item:hover { background: rgba(255,255,255,.06); }
+
+    .problem-icon {
+      font-size: 1.75rem;
+      margin-bottom: 16px;
+    }
+
+    .problem-item p {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      color: rgba(255,255,255,.8);
+      line-height: 1.55;
+    }
+
+    .problem-item p em {
+      font-style: italic;
+      color: rgba(255,255,255,.45);
+    }
+
+    /* ── How It Works ─────────────────────────────────────────────── */
+    #how {
+      background: var(--sand);
+    }
+
+    .how-header { margin-bottom: 64px; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 32px;
+    }
+
+    .step {
+      position: relative;
+    }
+
+    .step-number {
+      font-family: var(--font-serif);
+      font-size: 4rem;
+      color: rgba(196,113,74,.15);
+      line-height: 1;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .step-title {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      color: var(--dark);
+      margin-bottom: 12px;
+    }
+
+    .step-desc {
+      color: var(--slate-l);
+      line-height: 1.7;
+    }
+
+    .step-card {
+      margin-top: 24px;
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    /* Capture card */
+    .capture-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--sand);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: .8rem;
+      color: var(--slate);
+      font-weight: 500;
+    }
+
+    /* Constraints card */
+    .constraint-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--sand);
+      font-size: .875rem;
+    }
+
+    .constraint-row:last-child { border-bottom: none; }
+    .constraint-row .key { color: var(--slate-l); }
+    .constraint-row .val { font-weight: 600; color: var(--dark); }
+
+    /* Report card */
+    .report-dest {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--sand);
+    }
+
+    .report-dest:last-child { border-bottom: none; }
+
+    .dest-thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--sand);
+      overflow: hidden;
+    }
+
+    .dest-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    .dest-info { flex: 1; }
+    .dest-name { font-weight: 600; font-size: .875rem; color: var(--dark); }
+    .dest-meta { font-size: .75rem; color: var(--slate-l); }
+
+    .dest-price {
+      font-weight: 700;
+      color: var(--terra);
+      font-size: .95rem;
+    }
+
+    /* ── Features ─────────────────────────────────────────────────── */
+    #features {
+      background: var(--cream);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 28px;
+      margin-top: 56px;
+    }
+
+    .feature-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0,0,0,.04);
+      transition: transform .25s, box-shadow .25s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(30,38,48,.13);
+    }
+
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--sand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      margin-bottom: 16px;
+    }
+
+    .feature-name {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: .875rem;
+      color: var(--slate-l);
+      line-height: 1.6;
+    }
+
+    /* ── Trust ────────────────────────────────────────────────────── */
+    #trust {
+      background: var(--slate);
+      color: var(--white);
+    }
+
+    #trust .section-title { color: var(--white); }
+    #trust .section-sub   { color: rgba(255,255,255,.65); }
+
+    .trust-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .trust-levels {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    .trust-level {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 20px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+      transition: background .3s, border-color .3s;
+      cursor: default;
+    }
+
+    .trust-level.active {
+      background: rgba(255,255,255,.1);
+      border-color: rgba(255,255,255,.18);
+    }
+
+    .trust-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    .trust-level:nth-child(1) .trust-dot { background: #5ddcb2; }
+    .trust-level:nth-child(2) .trust-dot { background: #f0c87a; }
+    .trust-level:nth-child(3) .trust-dot { background: var(--terra); }
+
+    .trust-level-title {
+      font-weight: 600;
+      font-size: .9rem;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .trust-level-desc {
+      font-size: .8rem;
+      color: rgba(255,255,255,.55);
+      line-height: 1.5;
+    }
+
+    .trust-visual {
+      background: rgba(255,255,255,.05);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.08);
+      padding: 28px;
+    }
+
+    .audit-log-title {
+      font-size: .7rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.35);
+      margin-bottom: 16px;
+    }
+
+    .audit-entry {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+
+    .audit-entry:last-child { border-bottom: none; }
+
+    .audit-time {
+      font-size: .7rem;
+      color: rgba(255,255,255,.35);
+      min-width: 38px;
+      margin-top: 2px;
+    }
+
+    .audit-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      flex-shrink: 0;
+    }
+
+    .audit-icon.green  { background: rgba(93,220,178,.15); color: #5ddcb2; }
+    .audit-icon.yellow { background: rgba(240,200,122,.15); color: #f0c87a; }
+    .audit-icon.orange { background: rgba(196,113,74,.15);  color: var(--terra); }
+
+    .audit-text { font-size: .8rem; color: rgba(255,255,255,.7); line-height: 1.45; }
+    .audit-text strong { color: var(--white); }
+
+    /* ── Social Proof ─────────────────────────────────────────────── */
+    #social {
+      background: var(--sand);
+      padding: 80px 0;
+    }
+
+    .social-inner {
+      text-align: center;
+    }
+
+    .avatars {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 2px solid var(--sand);
+      margin-left: -10px;
+      overflow: hidden;
+      background: var(--slate-l);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .85rem;
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .avatar:first-child { margin-left: 0; }
+
+    .social-count {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      color: var(--dark);
+      margin-bottom: 40px;
+    }
+
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      text-align: left;
+    }
+
+    .testimonial {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .testimonial-quote {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      color: var(--dark);
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .testimonial-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--slate-l);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .8rem;
+      color: var(--white);
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .testimonial-name { font-weight: 600; font-size: .875rem; color: var(--dark); }
+    .testimonial-role { font-size: .75rem; color: var(--slate-l); }
+
+    /* ── Final CTA ────────────────────────────────────────────────── */
+    #cta {
+      position: relative;
+      padding: 120px 0;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .cta-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(20,28,38,.6), rgba(20,28,38,.75)),
+        url('https://images.unsplash.com/photo-1500835556837-99ac94a94552?w=1800&q=80') center/cover no-repeat;
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 2;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    #cta .section-title {
+      color: var(--white);
+      font-size: clamp(1.75rem, 4vw, 3rem);
+      margin-bottom: 16px;
+    }
+
+    #cta .section-sub {
+      color: rgba(255,255,255,.7);
+      max-width: 100%;
+      margin: 0 auto 40px;
+    }
+
+    .email-form {
+      display: flex;
+      gap: 10px;
+      max-width: 440px;
+      margin: 0 auto 16px;
+    }
+
+    .email-form input {
+      flex: 1;
+      padding: 14px 20px;
+      border-radius: 999px;
+      border: none;
+      font-size: .95rem;
+      background: rgba(255,255,255,.12);
+      color: var(--white);
+      backdrop-filter: blur(8px);
+      outline: none;
+      border: 1px solid rgba(255,255,255,.2);
+      transition: background .2s, border-color .2s;
+    }
+
+    .email-form input::placeholder { color: rgba(255,255,255,.45); }
+    .email-form input:focus {
+      background: rgba(255,255,255,.18);
+      border-color: rgba(255,255,255,.4);
+    }
+
+    .email-form .btn-primary { white-space: nowrap; }
+
+    .cta-disclaimer {
+      font-size: .78rem;
+      color: rgba(255,255,255,.4);
+    }
+
+    /* ── Footer ───────────────────────────────────────────────────── */
+    footer {
+      background: var(--dark);
+      padding: 36px 0;
+      text-align: center;
+    }
+
+    footer .nav-logo { color: rgba(255,255,255,.6); display: inline-block; margin-bottom: 12px; }
+    footer p { font-size: .8rem; color: rgba(255,255,255,.3); }
+
+    /* ── Fade-in animation ────────────────────────────────────────── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Responsive ───────────────────────────────────────────────── */
+    @media (max-width: 720px) {
+      .trust-inner { grid-template-columns: 1fr; gap: 40px; }
+      .email-form { flex-direction: column; }
+      .email-form input { border-radius: 999px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ─────────────────────────────────────────────── -->
+  <nav id="nav">
+    <div class="container">
+      <a href="#" class="nav-logo">around.guide</a>
+      <a href="#cta" class="nav-cta">Get early access</a>
+    </div>
+  </nav>
+
+  <!-- ── Hero ───────────────────────────────────────────────────── -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span></span>
+          Now in early access
+        </div>
+        <h1 class="hero-title">
+          Your travel dreams,<br />
+          <em>researched while you sleep.</em>
+        </h1>
+        <p class="hero-sub">
+          Capture ideas from anywhere. Set your budget and dates.
+          Let your AI travel agent do the rest — and alert you when it's time to book.
+        </p>
+        <div class="hero-actions">
+          <a href="#cta" class="btn-primary">Start collecting ideas — it's free</a>
+          <a href="#how" class="btn-ghost">
+            See how it works
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M9 3v12M4 10l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      scroll
+    </div>
+  </section>
+
+  <!-- ── Problem ────────────────────────────────────────────────── -->
+  <section id="problem">
+    <div class="problem-grid">
+      <div class="problem-item fade-up">
+        <div class="problem-icon">📸</div>
+        <p>"You saved 12 posts of Kyoto. <em>But when can you actually go?</em>"</p>
+      </div>
+      <div class="problem-item fade-up">
+        <div class="problem-icon">🗒️</div>
+        <p>"A friend mentioned the Azores. <em>Now it's buried in your notes app, forgotten.</em>"</p>
+      </div>
+      <div class="problem-item fade-up">
+        <div class="problem-icon">✈️</div>
+        <p>"Prices dropped for that flight you wanted. <em>You found out two weeks later.</em>"</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How It Works ───────────────────────────────────────────── -->
+  <section id="how" class="section">
+    <div class="container">
+      <div class="how-header">
+        <p class="label">How it works</p>
+        <h2 class="section-title">Three steps.<br />One trip planned.</h2>
+      </div>
+      <div class="steps">
+
+        <!-- Step 1 -->
+        <div class="step fade-up">
+          <div class="step-number">01</div>
+          <h3 class="step-title">Capture any spark</h3>
+          <p class="step-desc">Save a link, paste a photo, drop a voice note. Wherever inspiration finds you — we catch it.</p>
+          <div class="step-card">
+            <div class="capture-chips">
+              <span class="chip">🔗 Article link</span>
+              <span class="chip">📷 Instagram post</span>
+              <span class="chip">🎙️ Voice memo</span>
+              <span class="chip">💬 Friend's tip</span>
+              <span class="chip">📰 Newsletter</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step fade-up">
+          <div class="step-number">02</div>
+          <h3 class="step-title">Tell us your constraints</h3>
+          <p class="step-desc">When can you travel? What's your budget? Where are you flying from? That's all we need.</p>
+          <div class="step-card">
+            <div class="constraint-row">
+              <span class="key">Departure</span>
+              <span class="val">London Heathrow</span>
+            </div>
+            <div class="constraint-row">
+              <span class="key">Window</span>
+              <span class="val">June 14 – July 2</span>
+            </div>
+            <div class="constraint-row">
+              <span class="key">Duration</span>
+              <span class="val">7–10 nights</span>
+            </div>
+            <div class="constraint-row">
+              <span class="key">Budget</span>
+              <span class="val">€1,800 / person</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step fade-up">
+          <div class="step-number">03</div>
+          <h3 class="step-title">Receive your report</h3>
+          <p class="step-desc">We research flights, hotels, visa info, and local events — then hand you a ready-to-act brief.</p>
+          <div class="step-card">
+            <div class="report-dest">
+              <div class="dest-thumb">
+                <img src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=88&q=70" alt="Tokyo" loading="lazy" />
+              </div>
+              <div class="dest-info">
+                <div class="dest-name">Tokyo, Japan</div>
+                <div class="dest-meta">Jun 18 · 9 nights · Direct</div>
+              </div>
+              <div class="dest-price">€1,640</div>
+            </div>
+            <div class="report-dest">
+              <div class="dest-thumb">
+                <img src="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=88&q=70" alt="Azores" loading="lazy" />
+              </div>
+              <div class="dest-info">
+                <div class="dest-name">Azores, Portugal</div>
+                <div class="dest-meta">Jun 22 · 7 nights · 1 stop</div>
+              </div>
+              <div class="dest-price">€890</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Features ───────────────────────────────────────────────── -->
+  <section id="features" class="section">
+    <div class="container">
+      <p class="label">Features</p>
+      <h2 class="section-title">Everything your travel<br />wishlist has been missing.</h2>
+      <div class="features-grid">
+        <div class="feature-card fade-up">
+          <div class="feature-icon">✨</div>
+          <div class="feature-name">Inspiration Inbox</div>
+          <p class="feature-desc">One place for all your travel sparks — links, photos, notes, voice memos. Nothing slips through.</p>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon">🤖</div>
+          <div class="feature-name">Autonomous Research</div>
+          <p class="feature-desc">Your agent researches destinations, flight windows, and accommodation options — unprompted, while you're offline.</p>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon">📉</div>
+          <div class="feature-name">Price Watch</div>
+          <p class="feature-desc">We track price movements on your saved itineraries and alert you the moment fares drop.</p>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon">📋</div>
+          <div class="feature-name">Smart Reports</div>
+          <p class="feature-desc">Digestible destination briefs with actionable next steps — not a wall of search results to wade through.</p>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-name">Auto-Rebooking</div>
+          <p class="feature-desc">Grant your agent permission to rebook at a lower price automatically, under the exact same conditions.</p>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon">🗓️</div>
+          <div class="feature-name">Constraint Matching</div>
+          <p class="feature-desc">Visa requirements, school holidays, seasonal weather, local events — all factored into your window.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Trust ──────────────────────────────────────────────────── -->
+  <section id="trust" class="section">
+    <div class="container">
+      <div class="trust-inner">
+        <div>
+          <p class="label" style="color:rgba(255,255,255,.45)">Trust & Control</p>
+          <h2 class="section-title">You're always<br />in control.</h2>
+          <p class="section-sub">Choose exactly how much autonomy your agent has. Every action is logged, transparent, and reversible.</p>
+          <div class="trust-levels">
+            <div class="trust-level">
+              <span class="trust-dot"></span>
+              <div>
+                <div class="trust-level-title">Notify only</div>
+                <div class="trust-level-desc">Get an alert when something worth booking appears. You decide everything.</div>
+              </div>
+            </div>
+            <div class="trust-level active">
+              <span class="trust-dot"></span>
+              <div>
+                <div class="trust-level-title">Ask me first</div>
+                <div class="trust-level-desc">Agent finds the deal, drafts the booking, waits for your one-tap approval.</div>
+              </div>
+            </div>
+            <div class="trust-level">
+              <span class="trust-dot"></span>
+              <div>
+                <div class="trust-level-title">Act automatically</div>
+                <div class="trust-level-desc">Agent books when conditions match your rules. You review after — fully logged.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="trust-visual fade-up">
+          <div class="audit-log-title">Agent activity log</div>
+          <div class="audit-entry">
+            <span class="audit-time">09:14</span>
+            <span class="audit-icon green">🔍</span>
+            <span class="audit-text">Scanned <strong>1,240 itineraries</strong> for Tokyo in your window</span>
+          </div>
+          <div class="audit-entry">
+            <span class="audit-time">09:31</span>
+            <span class="audit-icon yellow">📉</span>
+            <span class="audit-text">Price drop detected: <strong>LHR→NRT</strong> down €180 vs. last week</span>
+          </div>
+          <div class="audit-entry">
+            <span class="audit-time">09:32</span>
+            <span class="audit-icon yellow">💬</span>
+            <span class="audit-text">Sent you a booking proposal — <strong>awaiting your approval</strong></span>
+          </div>
+          <div class="audit-entry">
+            <span class="audit-time">10:05</span>
+            <span class="audit-icon green">✅</span>
+            <span class="audit-text">You approved. Booking confirmed with <strong>Booking.com</strong> · Ref: AG-4821</span>
+          </div>
+          <div class="audit-entry">
+            <span class="audit-time">10:05</span>
+            <span class="audit-icon orange">📩</span>
+            <span class="audit-text">Confirmation sent to your email. <strong>See full itinerary →</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Social Proof ───────────────────────────────────────────── -->
+  <section id="social">
+    <div class="container">
+      <div class="social-inner">
+        <div class="avatars">
+          <div class="avatar" style="background:#7b9e87">M</div>
+          <div class="avatar" style="background:#8e7bbd">S</div>
+          <div class="avatar" style="background:#bd7b7b">A</div>
+          <div class="avatar" style="background:#7b9ebd">J</div>
+          <div class="avatar" style="background:#bd9e7b">R</div>
+          <div class="avatar" style="background:#9ebd7b">L</div>
+        </div>
+        <p class="social-count">Join <strong>2,400+ travelers</strong> already on the waitlist</p>
+        <div class="testimonials">
+          <div class="testimonial fade-up">
+            <p class="testimonial-quote">"I had a folder of 30 saved posts and zero plan. Around.Guide turned it into a proper report with real prices in 20 minutes."</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar" style="background:#7b9ebd">M</div>
+              <div>
+                <div class="testimonial-name">Maya R.</div>
+                <div class="testimonial-role">Product designer, Amsterdam</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial fade-up">
+            <p class="testimonial-quote">"The price drop alert saved me €240 on a flight I'd been watching for two months. It texted me before I even woke up."</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar" style="background:#8e7bbd">S</div>
+              <div>
+                <div class="testimonial-name">Seb K.</div>
+                <div class="testimonial-role">Engineer, Berlin</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial fade-up">
+            <p class="testimonial-quote">"Finally an app that respects how I actually plan trips — scattered, over months. It just... keeps up with me."</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar" style="background:#bd7b7b">A</div>
+              <div>
+                <div class="testimonial-name">Amara L.</div>
+                <div class="testimonial-role">Freelance writer, London</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Final CTA ──────────────────────────────────────────────── -->
+  <section id="cta">
+    <div class="cta-bg"></div>
+    <div class="container">
+      <div class="cta-content">
+        <h2 class="section-title">Stop losing your travel ideas.<br />Start getting reports.</h2>
+        <p class="section-sub">Free to start. Your agent works in the background so you don't have to.</p>
+        <form class="email-form" onsubmit="handleSubmit(event)">
+          <input type="email" placeholder="your@email.com" required autocomplete="email" />
+          <button type="submit" class="btn-primary">Get early access</button>
+        </form>
+        <p class="cta-disclaimer">No credit card required. Unsubscribe anytime.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ────────────────────────────────────────────────── -->
+  <footer>
+    <div class="container">
+      <a href="#" class="nav-logo">around.guide</a>
+      <p>© 2026 Around.Guide. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // ── Nav scroll state ─────────────────────────────────────────
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // ── Hero parallax / load animation ──────────────────────────
+    document.getElementById('hero').classList.add('loaded');
+
+    // ── Intersection observer for fade-up ────────────────────────
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          // stagger siblings
+          const siblings = entry.target.parentElement.querySelectorAll('.fade-up');
+          siblings.forEach((el, idx) => {
+            setTimeout(() => el.classList.add('visible'), idx * 80);
+          });
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // ── Trust level hover ────────────────────────────────────────
+    document.querySelectorAll('.trust-level').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        document.querySelectorAll('.trust-level').forEach(e => e.classList.remove('active'));
+        el.classList.add('active');
+      });
+    });
+
+    // ── Email form ───────────────────────────────────────────────
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button');
+      btn.textContent = '🎉 You\'re on the list!';
+      btn.disabled = true;
+      btn.style.background = '#5ddcb2';
+      btn.style.color = '#1e2630';
+      e.target.querySelector('input').disabled = true;
+    }
+  </script>
+</body>
+</html>
